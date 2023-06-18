@@ -22,7 +22,7 @@ app.UseSwaggerUI();
 
 app.MapGet("/", () => { Results.Redirect("/swagger/index.html"); });
 
-app.MapPost("/", async ([FromBody] Message body, ApplicationContext db) =>
+app.MapPost("/", async ([FromBody] Message body, ApplicationContext db, ILogger<object> logger) =>
 {
     try
     {
@@ -48,6 +48,7 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db) =>
     }
     catch(Exception ex)
     {
+        logger.LogError(ex, "Error");
         return Results.BadRequest(ex.Message);
     }
 });
