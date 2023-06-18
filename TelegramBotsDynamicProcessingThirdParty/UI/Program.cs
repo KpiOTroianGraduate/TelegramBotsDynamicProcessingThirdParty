@@ -17,12 +17,10 @@ builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseInMemoryDatabase
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.MapGet("/", () => { Results.Redirect("/swagger/index.html"); });
 
 app.MapPost("/", async ([FromBody] Message body, ApplicationContext db) =>
 {
