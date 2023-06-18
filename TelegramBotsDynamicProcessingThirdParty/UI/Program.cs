@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot.Types;
 using UI;
+using User = UI.Entities.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db) =>
         var user = await db.Users.FirstOrDefaultAsync(u => u.TelegramId == body.Chat.Id).ConfigureAwait(false);
         if (user == null)
         {
-            var nweUser = new UI.Entities.User
+            var nweUser = new User
             {
                 TelegramId = body.Chat.Id,
                 Count = 0
