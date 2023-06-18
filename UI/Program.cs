@@ -46,9 +46,9 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db) =>
 
         return Results.Ok($"Your counter = {user.Count}");
     }
-    catch
+    catch(Exception ex)
     {
-        return Results.BadRequest();
+        return Results.BadRequest(ex.Message);
     }
 });
 
