@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Telegram.Bot.Types;
 using UI;
 using User = UI.Entities.User;
@@ -56,7 +57,7 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db, ILogger<
     catch(Exception ex)
     {
         logger.LogError(ex, "Error");
-        return Results.BadRequest(ex.Message);
+        return Results.BadRequest(JsonConvert.SerializeObject(ex.Message));
     }
 });
 
