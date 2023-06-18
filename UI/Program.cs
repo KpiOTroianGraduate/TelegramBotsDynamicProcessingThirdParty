@@ -34,6 +34,21 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db, ILogger<
 {
     try
     {
+        var messageToShow = "";
+        if (body.From != null)
+        {
+            messageToShow = $"{body.From.FirstName} @${body.From.Username}";
+            if (!string.IsNullOrEmpty(body.From.Username))
+            {
+                messageToShow = $"{messageToShow} {body.From.Username}";
+            }
+
+            if (!string.IsNullOrEmpty(body.From.LastName))
+            {
+                messageToShow = $"{messageToShow} {body.From.LastName}";
+            }
+        }
+
         var user = await db.Users.FirstOrDefaultAsync(u => u.TelegramId == body.Chat.Id).ConfigureAwait(false);
         if (user == null)
         {
@@ -46,13 +61,14 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db, ILogger<
             await db.Users.AddAsync(nweUser).ConfigureAwait(false);
             await db.SaveChangesAsync().ConfigureAwait(false);
 
-            return Results.Ok("Welcome, new User");
+            
+            return Results.Ok($"Welcome, {messageToShow}");
         }
 
         user.Count++;
         await db.SaveChangesAsync().ConfigureAwait(false);
 
-        return Results.Ok($"Your counter = {user.Count}");
+        return Results.Ok($"{messageToShow}, your counter = {user.Count}");
     }
     catch(Exception ex)
     {
