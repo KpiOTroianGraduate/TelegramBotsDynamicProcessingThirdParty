@@ -37,10 +37,10 @@ app.MapPost("/", async ([FromBody] Message body, ApplicationContext db, ILogger<
         var messageToShow = "";
         if (body.From != null)
         {
-            messageToShow = $"{body.From.FirstName} @${body.From.Username}";
+            messageToShow = body.From.FirstName;
             if (!string.IsNullOrEmpty(body.From.Username))
             {
-                messageToShow = $"{messageToShow} {body.From.Username}";
+                messageToShow = $"{messageToShow} @{body.From.Username}";
             }
 
             if (!string.IsNullOrEmpty(body.From.LastName))
